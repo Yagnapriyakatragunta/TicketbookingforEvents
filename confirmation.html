@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmation</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+            background-color: #0071ce;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        #confirmation-page {
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .button-group {
+            margin-top: 20px;
+        }
+
+        .button-group button {
+            margin: 5px;
+            padding: 10px 15px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .cancel-btn {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .feedback-btn {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .confirm-dialog {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-top: 20px;
+            display: none;
+            border-radius: 10px;
+        }
+
+        .confirm-dialog button {
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <a href="dashboard.html">Home</a>
+            <a href="events.html">Events</a>
+            <a href="contact.html">Contact Us</a>
+            <a href="logout.html">Logout</a>
+        </ul>
+    </nav>
+
+    <section id="confirmation-page">
+        <h2>🎉 Ticket Booking Successful</h2>
+        <p>Thank you for booking your tickets! Your confirmation details are below:</p>
+        <p><strong>Event:</strong> <span id="event-name"></span></p>
+        <p><strong>Date:</strong> <span id="event-date"></span></p>
+        <p><strong>Location:</strong> <span id="event-location"></span></p>
+        <p><strong>Tickets:</strong> <span id="event-quantity"></span></p>
+        <p><strong>Amount Paid:</strong> <span id="amount"></span></p>
+
+        <div class="button-group">
+            <button onclick="window.location.href='dashboard.html'">Return to Home</button>
+            <button onclick="window.location.href='booked.html'">View My Tickets</button>
+            <button onclick="showCancelConfirmation()" class="cancel-btn">Cancel Booking</button>
+            <button onclick="window.location.href='feedback.html'" class="feedback-btn">Give Feedback</button>
+        </div>
+
+        <!-- Confirmation Prompt -->
+        <div id="cancel-confirm-dialog" class="confirm-dialog">
+            <p>Are you sure you want to cancel your booking?</p>
+            <button onclick="confirmCancel()">Yes, Cancel</button>
+            <button onclick="hideCancelConfirmation()">No, Keep Booking</button>
+        </div>
+    </section>
+
+    <script>
+        let latestTicket = null;
+        let eventList = [];
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const bookedTickets = JSON.parse(localStorage.getItem("bookedTickets")) || [];
+            latestTicket = bookedTickets[bookedTickets.length - 1];
+            eventList = JSON.parse(localStorage.getItem("eventList")) || [];
+
+            if (latestTicket) {
+                document.getElementById("event-name").textContent = latestTicket.name;
+                document.getElementById("event-date").textContent = latestTicket.date;
+                document.getElementById("event-location").textContent = latestTicket.location;
+                document.getElementById("event-quantity").textContent = latestTicket.quantity;
+                document.getElementById("amount").textContent = `$${(latestTicket.price * latestTicket.quantity).toFixed(2)}`;
+            } else {
+                document.getElementById("confirmation-page").innerHTML = "<p>No recent booking found.</p>";
+            }
+        });
+
+        function showCancelConfirmation() {
+            document.getElementById("cancel-confirm-dialog").style.display = "block";
+        }
+
+        function hideCancelConfirmation() {
+            document.getElementById("cancel-confirm-dialog").style.display = "none";
+        }
+
+        function confirmCancel() {
+            if (!latestTicket || !eventList.length) {
+                alert("No booking found to cancel.");
+                return;
+            }
+
+            const eventIndex = eventList.findIndex(e =>
+                e.name === latestTicket.name &&
+                e.date === latestTicket.date &&
+                e.location === latestTicket.location
+            );
+
+            if (eventIndex !== -1) {
+                eventList[eventIndex].tickets = parseInt(eventList[eventIndex].tickets) + parseInt(latestTicket.quantity);
+                localStorage.setItem("eventList", JSON.stringify(eventList));
+            }
+
+            let bookedTickets = JSON.parse(localStorage.getItem("bookedTickets")) || [];
+            bookedTickets.pop();
+            localStorage.setItem("bookedTickets", JSON.stringify(bookedTickets));
+
+            document.getElementById("confirmation-page").innerHTML = `
+                <h2 style="color:red;">❌ Booking Cancelled</h2>
+                <p>Your booking has been successfully cancelled.</p>
+                <button onclick="window.location.href='events.html'">Back to Events</button>
+            `;
+        }
+    </script>
+</body>
+</html>

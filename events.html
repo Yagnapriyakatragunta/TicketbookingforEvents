@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Events - Event Ticket Booking</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+    }
+    header {
+      background-color: #99b122;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    nav a {
+      margin: 0 15px;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    main {
+      padding: 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+    .filters {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .filters input,
+    .filters select {
+      padding: 10px;
+      margin: 10px 5px;
+      width: 200px;
+    }
+    .event-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+    .event-card {
+      background-color: white;
+      padding: 20px;
+      width: 300px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .event-card h3 {
+      margin-top: 0;
+    }
+    .form-group {
+      margin-top: 10px;
+    }
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    button {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Event Listings</h1>
+    <nav>
+      <a href="dashboard.html">Home</a>
+      <a href="contact.html">Contact Us</a>
+      <a href="logout.html">Logout</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="filters">
+      <input type="text" id="searchBar" placeholder="Search Events" onkeyup="searchEvents()">
+      <select id="eventTypeFilter" onchange="filterEvents()">
+        <option value="">All Categories</option>
+        <option value="Music / Concert">Music / Concert</option>
+        <option value="Technology / Conference">Technology / Conference</option>
+        <option value="Entertainment / Comedy">Entertainment / Comedy</option>
+        <option value="Food / Festival">Food / Festival</option>
+        <option value="Sports">Sports</option>
+        <option value="Art / Exhibition">Art / Exhibition</option>
+      </select>
+      <select id="locationFilter" onchange="filterEvents()">
+        <option value="">All Locations</option>
+        <option value="New York City">New York City</option>
+        <option value="San Francisco">San Francisco</option>
+        <option value="Los Angeles">Los Angeles</option>
+        <option value="Chicago">Chicago</option>
+        <option value="Miami">Miami</option>
+        <option value="Seattle">Seattle</option>
+        <option value="Boston">Boston</option>
+        <option value="Austin">Austin</option>
+        <option value="Hollywood">Hollywood</option>
+        <option value="Las Vegas">Las Vegas</option>
+      </select>
+    </div>
+
+    <section id="event-list" class="event-list">
+  <!-- Events will be rendered here by JavaScript -->
+</section>
+
+<script>
+  const events = [
+    { id: 1, name: "Concert Night", date: "2025-03-15", time: "7:00 PM - 10:00 PM", location: "New York City", category: "Music / Concert", price: 50, tickets: 150, rescheduleDates: ["2025-03-20", "2025-03-25"] },
+    { id: 2, name: "Tech Conference", date: "2025-04-10", time: "9:00 AM - 5:00 PM", location: "San Francisco", category: "Technology / Conference", price: 150, tickets: 129, rescheduleDates: ["2025-04-15", "2025-04-20"] },
+    { id: 3, name: "Comedy Show", date: "2025-05-20", time: "8:00 PM - 11:00 PM", location: "Los Angeles", category: "Entertainment / Comedy", price: 75, tickets: 80, rescheduleDates: ["2025-05-25", "2025-05-30"] },
+    { id: 4, name: "Food Festival", date: "2025-06-10", time: "12:00 PM - 6:00 PM", location: "Chicago", category: "Food / Festival", price: 40, tickets: 90, rescheduleDates: ["2025-06-15", "2025-06-20"] },
+    { id: 5, name: "Sports Championship", date: "2025-07-05", time: "3:00 PM - 7:00 PM", location: "Miami", category: "Sports", price: 100, tickets: 75, rescheduleDates: ["2025-07-10", "2025-07-15"] },
+    { id: 6, name: "Art Exhibition", date: "2025-08-12", time: "10:00 AM - 4:00 PM", location: "Seattle", category: "Art / Exhibition", price: 30, tickets: 80, rescheduleDates: ["2025-08-18", "2025-08-25"] },
+    { id: 7, name: "Book Fair", date: "2025-09-20", time: "11:00 AM - 5:00 PM", location: "Boston", category: "Entertainment / Comedy", price: 20, tickets: 60, rescheduleDates: ["2025-09-25", "2025-09-30"] },
+    { id: 8, name: "Music Festival", date: "2025-10-05", time: "2:00 PM - 10:00 PM", location: "Austin", category: "Music / Concert", price: 80, tickets: 56, rescheduleDates: ["2025-10-10", "2025-10-15"] },
+    { id: 9, name: "Film Premiere", date: "2025-11-15", time: "6:00 PM - 9:00 PM", location: "Hollywood", category: "Entertainment / Comedy", price: 60, tickets: 40, rescheduleDates: ["2025-11-20", "2025-11-25"] },
+    { id: 10, name: "Charity Gala", date: "2025-12-01", time: "7:00 PM - 11:00 PM", location: "Las Vegas", category: "Technology / Conference", price: 200, tickets: 50, rescheduleDates: ["2025-12-05", "2025-12-10"] },
+    { id: 11, name: "Startup Hackathon", date: "2026-01-15", time: "9:00 AM - 9:00 PM", location: "San Francisco", category: "Technology / Conference", price: 0, tickets: 100, rescheduleDates: ["2026-01-18", "2026-01-20"] },
+    { id: 12, name: "Wellness Retreat", date: "2026-02-12", time: "6:00 AM - 12:00 PM", location: "Seattle", category: "Wellness / Fitness", price: 85, tickets: 80, rescheduleDates: ["2026-02-18", "2026-02-20"] },
+    { id: 13, name: "Craft Workshop", date: "2026-03-10", time: "10:00 AM - 3:00 PM", location: "Boston", category: "Art / Exhibition", price: 45, tickets: 60, rescheduleDates: ["2026-03-15", "2026-03-20"] },
+    { id: 14, name: "Gaming Expo", date: "2026-04-07", time: "10:00 AM - 6:00 PM", location: "Chicago", category: "Entertainment / Comedy", price: 70, tickets: 90, rescheduleDates: ["2026-04-10", "2026-04-15"] },
+    { id: 15, name: "Open Mic Night", date: "2026-05-18", time: "6:00 PM - 9:00 PM", location: "Austin", category: "Music / Concert", price: 25, tickets: 40, rescheduleDates: ["2026-05-22", "2026-05-25"] },
+    { id: 16, name: "Science Fair", date: "2026-06-20", time: "11:00 AM - 4:00 PM", location: "New York City", category: "Technology / Conference", price: 60, tickets: 100, rescheduleDates: ["2026-06-25", "2026-06-30"] },
+    { id: 17, name: "Wine Tasting", date: "2026-07-22", time: "1:00 PM - 6:00 PM", location: "San Francisco", category: "Food / Festival", price: 90, tickets: 30, rescheduleDates: ["2026-07-27", "2026-07-30"] },
+    { id: 18, name: "Summer Parade", date: "2026-08-05", time: "10:00 AM - 2:00 PM", location: "Miami", category: "Art / Exhibition", price: 0, tickets: 300, rescheduleDates: ["2026-08-10", "2026-08-15"] },
+    { id: 19, name: "Coding Bootcamp", date: "2026-09-14", time: "9:00 AM - 5:00 PM", location: "Los Angeles", category: "Technology / Conference", price: 150, tickets: 50, rescheduleDates: ["2026-09-20", "2026-09-25"] },
+    { id: 20, name: "Theatre Play", date: "2026-10-01", time: "7:00 PM - 9:30 PM", location: "New York City", category: "Entertainment / Comedy", price: 65, tickets: 75, rescheduleDates: ["2026-10-05", "2026-10-10"] }
+  ];
+
+  function renderEvents(eventList = events) {
+    const container = document.getElementById("event-list");
+    container.innerHTML = '';
+    eventList.forEach(event => {
+      const card = document.createElement("div");
+      card.className = "event-card";
+      card.setAttribute("data-name", event.name.toLowerCase());
+      card.setAttribute("data-category", event.category.toLowerCase());
+      card.setAttribute("data-location", event.location.toLowerCase());
+      card.innerHTML = `
+        <h3>${event.name}</h3>
+        <p><strong>Date:</strong> ${event.date}</p>
+        <p><strong>Time:</strong> ${event.time}</p>
+        <p><strong>Location:</strong> ${event.location}</p>
+        <p><strong>Category:</strong> ${event.category}</p>
+        <p><strong>Price:</strong> $${event.price}</p>
+        <p><strong>Available Tickets:</strong> ${event.tickets}</p>
+        <label>Select Tickets: <input type="number" id="qty-${event.id}" value="1" min="1" max="${event.tickets}" onchange="updateTotal(${event.id}, ${event.price})"></label>
+        <p><strong>Total:</strong> $<span id="total-${event.id}">${event.price.toFixed(2)}</span></p>
+        <div class="actions">
+          <button onclick="bookTicket(${event.id})">Book Now</button>
+          <button onclick="toggleReschedule(${event.id})">Reschedule</button>
+        </div>
+       <div id="reschedule-${event.id}" style="display:none; margin-top:10px;">
+  <select id="reschedule-select-${event.id}">
+    ${event.rescheduleDates.map(date => `<option value="${date}">${date}</option>`).join('')}
+  </select>
+  <button onclick="confirmReschedule(${event.id})">Confirm</button>
+       </div>
+
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  function updateTotal(id, price) {
+    const qty = parseInt(document.getElementById(`qty-${id}`).value) || 1;
+    document.getElementById(`total-${id}`).innerText = (qty * price).toFixed(2);
+  }
+
+  function bookTicket(id) {
+    const event = events.find(e => e.id === id);
+    localStorage.setItem("selectedEvent", JSON.stringify(event));
+    alert(`Booked: ${event.name}`);
+    window.location.href = "checkout.html";
+  }
+
+  function toggleReschedule(id) {
+    const el = document.getElementById(`reschedule-${id}`);
+    el.style.display = (el.style.display === "block") ? "none" : "block";
+  }
+
+  function confirmReschedule(id) {
+    const select = document.querySelector(`#reschedule-${id} select`);
+    alert(`Rescheduled to: ${select.value}`);
+  }
+
+  function searchEvents() {
+    const term = document.getElementById("searchBar").value.toLowerCase();
+    const filtered = events.filter(e => e.name.toLowerCase().includes(term));
+    renderEvents(filtered);
+  }
+
+  function filterEvents() {
+    const type = document.getElementById("eventTypeFilter").value.toLowerCase();
+    const location = document.getElementById("locationFilter").value.toLowerCase();
+    const filtered = events.filter(e =>
+      (!type || e.category.toLowerCase() === type) &&
+      (!location || e.location.toLowerCase().includes(location))
+    );
+    renderEvents(filtered);
+  }
+
+  window.onload = () => renderEvents();
+</script>
+
+<footer>
+  <p>&copy; 2025 Event Ticket Booking. All rights reserved.</p>
+</footer>
+</body>
+</html>
+
