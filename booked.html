@@ -1,51 +1,65 @@
-<!-- booked.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Booked Tickets</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <title>Book Tickets</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #004aad;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #003080;
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <h1>Booked Tickets</h1>
-        <nav>
-            <a href="dashboard.html">Home</a>
-            <a href="events.html">Events</a>
-            <a href="contact.html">Contact Us</a>
-         
-            <a href="logout.html">Logout</a>
-        </nav>
-    </header>
-    
-    <main>
-        <section id="booked-tickets-section">
-            <h2>Your Booked Tickets</h2>
-            <ul id="booked-tickets-list"></ul>
-            <p id="no-tickets-message" style="display: none;">You have no booked tickets.</p>
-        </section>
-        <button onclick="window.location.href='final.html'">Go to Booked Events</button>
-    </main>
-    
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            let bookedTickets = JSON.parse(localStorage.getItem("bookedTickets")) || [];
-            let bookedTicketsList = document.getElementById("booked-tickets-list");
-            let noTicketsMessage = document.getElementById("no-tickets-message");
+  <div class="container">
+    <h2>Book Your Event</h2>
+    <p><strong>Event:</strong> Concert Night</p>
+    <p><strong>Date:</strong> 2025-06-15</p>
+    <p><strong>Location:</strong> New York City (EST)</p>
+    <p><strong>Tickets:</strong> 2</p>
+    <p><strong>Total Amount:</strong> $100</p>
 
-            if (bookedTickets.length === 0) {
-                noTicketsMessage.style.display = "block";
-            } else {
-                noTicketsMessage.style.display = "none";
-                bookedTickets.forEach(ticket => {
-                    let li = document.createElement("li");
-                    li.innerHTML = `<strong>${ticket.name}</strong> - ${ticket.date} (${ticket.location}) - <strong>Price:</strong> ${ticket.price}`;
-                    bookedTicketsList.appendChild(li);
-                });
-            }
-        });
-    </script>
+    <button onclick="bookNow()">Confirm Booking</button>
+  </div>
+
+  <script>
+    function bookNow() {
+      const bookingData = {
+        event: "Concert Night",
+        date: "2025-06-15",
+        location: "New York City (EST)",
+        tickets: 2,
+        amount: 100
+      };
+
+      // Save to localStorage
+      localStorage.setItem("bookingInfo", JSON.stringify(bookingData));
+
+      // Redirect to confirmation page
+      window.location.href = "confirmation.html";
+    }
+  </script>
 </body>
 </html>
 
