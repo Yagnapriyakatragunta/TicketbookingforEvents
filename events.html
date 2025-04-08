@@ -181,7 +181,7 @@
 
   function bookTicket(id) {
     const event = events.find(e => e.id === id);
-    sessionStorage.setItem("selectedEvent", JSON.stringify(event));
+    localStorage.setItem("selectedEvent", JSON.stringify(event));
     alert(Booked: ${event.name});
     window.location.href = "checkout.html";
   }
