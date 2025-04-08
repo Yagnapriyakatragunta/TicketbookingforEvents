@@ -164,7 +164,7 @@
         </div>
        <div id="reschedule-${event.id}" style="display:none; margin-top:10px;">
   <select id="reschedule-select-${event.id}">
-    ${event.rescheduleDates.map(date => `<option value="${date}">${date}</option>`).join('')}
+    ${event.rescheduleDates.map(date => <option value="${date}">${date}</option>).join('')}
   </select>
   <button onclick="confirmReschedule(${event.id})">Confirm</button>
        </div>
@@ -175,25 +175,25 @@
   }
 
   function updateTotal(id, price) {
-    const qty = parseInt(document.getElementById(`qty-${id}`).value) || 1;
-    document.getElementById(`total-${id}`).innerText = (qty * price).toFixed(2);
+    const qty = parseInt(document.getElementById(qty-${id}).value) || 1;
+    document.getElementById(total-${id}).innerText = (qty * price).toFixed(2);
   }
 
   function bookTicket(id) {
     const event = events.find(e => e.id === id);
-    localStorage.setItem("selectedEvent", JSON.stringify(event));
-    alert(`Booked: ${event.name}`);
+    sessionStorage.setItem("selectedEvent", JSON.stringify(event));
+    alert(Booked: ${event.name});
     window.location.href = "checkout.html";
   }
 
   function toggleReschedule(id) {
-    const el = document.getElementById(`reschedule-${id}`);
+    const el = document.getElementById(reschedule-${id});
     el.style.display = (el.style.display === "block") ? "none" : "block";
   }
 
   function confirmReschedule(id) {
-    const select = document.querySelector(`#reschedule-${id} select`);
-    alert(`Rescheduled to: ${select.value}`);
+    const select = document.querySelector(#reschedule-${id} select);
+    alert(Rescheduled to: ${select.value});
   }
 
   function searchEvents() {
@@ -220,4 +220,3 @@
 </footer>
 </body>
 </html>
-
