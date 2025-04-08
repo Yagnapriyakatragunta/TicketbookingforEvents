@@ -39,7 +39,7 @@
     
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const selectedEvent = JSON.parse(sessionStorage.getItem("selectedEvent")); // Retrieve event data
+            const selectedEvent = JSON.parse(localStorage.getItem("selectedEvent")); // Retrieve event data
         
             if (!selectedEvent) {
                 document.getElementById("selected-event-name").textContent = selectedEvent.name;
